@@ -4,33 +4,33 @@ import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Roles } from 'src/core/decorators/roles.decorator';
 import { ERole } from 'src/core/enums/role.enum';
-import { ProductsService } from './products.service';
+import { CustomersService } from './customers.service';
 
-@Controller('products')
-export class ProductsController {
+@Controller('customers')
+export class CustomersController {
     constructor(
-        private productsService: ProductsService,
+        private customerService: CustomersService,
         private ModuleRef: ModuleRef
     ) { }
 
     @UseGuards(JwtAuthGuard)
     @Roles(ERole.ADMINISTRADOR)
     @Get('/')
-    async getProducts(@Res() res: Response) {
+    async getCustomers(@Res() res: Response) {
         try {
-            let products = await this.productsService.getAll()
-            res.status(HttpStatus.OK).json(products);
+            let customers = await this.customerService.getAll()
+            res.status(HttpStatus.OK).json(customers);
         } catch (error) {
             throw new InternalServerErrorException(error.toString())
         }
     }
     @UseGuards(JwtAuthGuard)
     @Roles(ERole.ADMINISTRADOR)
-    @Get('/:productid')
-    async getDetail(@Res() res: Response, @Param("productid") productid: string) {
+    @Get('/:customerid')
+    async getDetail(@Res() res: Response, @Param("customerid") customerid: string) {
         try {
-            let products = await this.productsService.getById(productid)
-            res.status(HttpStatus.OK).json(products);
+            let customers = await this.customerService.getById(customerid)
+            res.status(HttpStatus.OK).json(customers);
         } catch (error) {
             throw new InternalServerErrorException(error.toString())
         }

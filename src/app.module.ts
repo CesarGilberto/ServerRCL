@@ -7,9 +7,8 @@ import { RolesModule } from './collections/roles/roles.module';
 import { RolesGuard } from './core/guards/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { NotesModule } from './collections/notes/notes.module';
-import { ProductsController } from './collections/products/products.controller';
-import { ProductsService } from './collections/products/products.service';
 import { ProductsModule } from './collections/products/products.module';
+import { CustomersModule } from './collections/customers/customers.module';
 require('dotenv').config();
 @Module({
   imports: [
@@ -20,15 +19,15 @@ require('dotenv').config();
     UsersModule,
     RolesModule,
     NotesModule,
-    ProductsModule
+    ProductsModule,
+    CustomersModule
   ],
-  controllers: [AppController, ProductsController],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
-    ProductsService,
   ],
 })
 export class AppModule {}
