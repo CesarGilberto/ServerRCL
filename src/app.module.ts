@@ -9,6 +9,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { NotesModule } from './collections/notes/notes.module';
 import { ProductsModule } from './collections/products/products.module';
 import { CustomersModule } from './collections/customers/customers.module';
+import { ServicesService } from './collections/services/services.service';
+import { ServicesModule } from './collections/services/services.module';
 require('dotenv').config();
 @Module({
   imports: [
@@ -20,7 +22,8 @@ require('dotenv').config();
     RolesModule,
     NotesModule,
     ProductsModule,
-    CustomersModule
+    CustomersModule,
+    ServicesModule
   ],
   controllers: [AppController],
   providers: [

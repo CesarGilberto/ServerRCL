@@ -8,7 +8,7 @@ export const ProductsSchema = new mongoose.Schema({
     nombre:String,
     precio:Number,
     producto_id:String,
-    tam:String,
+    tam:String
 }, {
     timestamps: true,
     collection: 'productos'
