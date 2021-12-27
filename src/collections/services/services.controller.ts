@@ -6,7 +6,7 @@ import { Roles } from 'src/core/decorators/roles.decorator';
 import { ERole } from 'src/core/enums/role.enum';
 import { ServicesService } from './services.service';
 
-@Controller('servics')
+@Controller('services')
 export class ServicesController {
     constructor(
         private servicesService: ServicesService,
