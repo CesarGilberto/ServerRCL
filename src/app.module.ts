@@ -12,6 +12,7 @@ import { CustomersModule } from './collections/customers/customers.module';
 import { ServicesModule } from './collections/services/services.module';
 import { MovementsModule } from './collections/movements/movements.module';
 import { CashcutModule } from './collections/cashcut/cashcut.module';
+import { SalesModule } from './collections/sales/sales.module';
 require('dotenv').config();
 @Module({
   imports: [
@@ -26,7 +27,8 @@ require('dotenv').config();
     CustomersModule,
     ServicesModule,
     MovementsModule,
-    CashcutModule
+    CashcutModule,
+    SalesModule
   ],
   controllers: [AppController],
   providers: [

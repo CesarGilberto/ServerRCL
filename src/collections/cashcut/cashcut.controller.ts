@@ -16,7 +16,6 @@ export class CashcutController{
 @UseGuards(JwtAuthGuard)
 @Roles(ERole.ADMINISTRADOR)
 @Get('/')
-
     async getCashcut(@Res() res:Response){
         try {
             let cashcut = await this.cashcutService.getAll()
