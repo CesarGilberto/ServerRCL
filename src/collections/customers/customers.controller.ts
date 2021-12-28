@@ -24,15 +24,15 @@ export class CustomersController {
             throw new InternalServerErrorException(error.toString())
         }
     }
-    @UseGuards(JwtAuthGuard)
-    @Roles(ERole.ADMINISTRADOR)
-    @Get('/:customerid')
-    async getDetail(@Res() res: Response, @Param("customerid") customerid: string) {
-        try {
-            let customers = await this.customerService.getById(customerid)
-            res.status(HttpStatus.OK).json(customers);
-        } catch (error) {
-            throw new InternalServerErrorException(error.toString())
-        }
-    }
+    // @UseGuards(JwtAuthGuard)
+    // @Roles(ERole.ADMINISTRADOR)
+    // @Get('/:customerid')
+    // async getCustomers(@Res() res: Response, @Param("customerid") customerid: string) {
+    //     try {
+    //         let customers = await this.customerService.getById(customerid)
+    //         res.status(HttpStatus.OK).json(customers);
+    //     } catch (error) {
+    //         throw new InternalServerErrorException(error.toString())
+    //     }
+    // }
 }
