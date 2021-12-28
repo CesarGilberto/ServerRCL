@@ -23,4 +23,15 @@ export class SalesController {
             throw new InternalServerErrorException(error.toString())
         }
     }
+    @UseGuards(JwtAuthGuard)
+    @Roles(ERole.ADMINISTRADOR)
+    @Get('/:saleid')
+    async getDetail(@Res() res: Response, @Param("saleid") saleid:string) {
+        try {
+            let sales = await this.saleService.getById(saleid)
+            res.status(HttpStatus.OK).json(sales);
+        } catch (error) {
+            throw new InternalServerErrorException(error.toString())
+        }
+    } 
 }
