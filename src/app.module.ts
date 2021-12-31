@@ -13,9 +13,14 @@ import { ServicesModule } from './collections/services/services.module';
 import { MovementsModule } from './collections/movements/movements.module';
 import { CashcutModule } from './collections/cashcut/cashcut.module';
 import { SalesModule } from './collections/sales/sales.module';
+import { ConfigModule } from '@nestjs/config';
+
 require('dotenv').config();
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true
+    }),
     MongooseModule.forRoot(process.env.MONGOENV, {
       useNewUrlParser: true
     }),

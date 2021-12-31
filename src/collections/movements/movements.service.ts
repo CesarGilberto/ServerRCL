@@ -9,6 +9,6 @@ import { IMovements } from "./interfaces/movements.interface";
             @InjectModel('Movement') private readonly movementModel: Model<IMovements>
         ) {}
         async getAll(): Promise<Array<IMovements>> {
-            return this.movementModel.find();
+            return this.movementModel.find().lean();
         }
     }

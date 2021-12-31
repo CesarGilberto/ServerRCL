@@ -5,13 +5,16 @@ import { UserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 import { ModuleRef} from '@nestjs/core'
 import { ERole } from 'src/core/enums/role.enum';
+import { MailjetService } from 'src/core/services/mailjet';
+import { ETemplatesMailjet } from 'src/core/enums/templates-mailjet.enum';
 
 @Controller('users')
 export class UsersController {
     private rolService:RolesService
     constructor(
         private userService: UsersService,
-        private ModuleRef:ModuleRef
+        private ModuleRef:ModuleRef,
+        private mailJetService:MailjetService
     ) {}
     async onModuleInit(){
         this.rolService = this.ModuleRef.get(RolesService, {strict:false})
@@ -27,6 +30,41 @@ export class UsersController {
             let rol = await this.rolService.getByDescription(ERole.CLIENTE)
             userDto.rol_id = rol.rol_id
             await this.userService.create(userDto);
+
+            res.status(HttpStatus.CREATED).json({ message: 'user created' });
+        } catch (error) {
+            throw new InternalServerErrorException(error.toString())
+        }
+    } 
+    @Post('/recovery-password')
+    async recoveryPass(@Res() res: Response, @Body() userDto: UserDto) {
+        console.log(userDto.correo)
+        let usuario = await this.userService.getByEmail(userDto.correo.trim())
+        console.log(usuario)
+        if (!usuario) {
+            throw new BadRequestException("No se encontró un usuario con ese correo")
+        }
+        try {
+            try {
+                this.mailJetService.sendEmail({
+                    Messages: [
+                        {
+                            To: [
+                                {
+                                    Email: usuario.correo,
+                                    Name: usuario.nombre,
+                                }
+                            ],
+                            TemplateID: ETemplatesMailjet.DEFAULT_PASSWORD,
+                            TemplateLanguage: true,
+                            Subject: 'Recuperación de cuenta',
+                            Variables: {
+                                contrasena: usuario.contrasena,
+                            }
+                        }
+                    ]
+                });
+            } catch (error) {}
 
             res.status(HttpStatus.CREATED).json({ message: 'user created' });
         } catch (error) {

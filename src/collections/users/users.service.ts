@@ -16,6 +16,11 @@ export class UsersService {
     }
 
     async getByEmail(usuario: string): Promise<IUser> {
-        return this.userModel.findOne({ usuario });
+        return this.userModel.findOne({$or:[
+            {usuario},{correo:usuario}
+        ]});
+    }
+    async getById(usuario_id: string): Promise<IUser> {
+        return this.userModel.findOne({ usuario_id });
     }
 }

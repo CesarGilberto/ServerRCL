@@ -5,6 +5,7 @@ export interface IUser {
     nombre:string,
     telefono:string,
     usuario:string,
+    correo:string,
     contrasena:string,
     rol_id:string,
     turno:string

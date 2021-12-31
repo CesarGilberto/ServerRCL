@@ -9,6 +9,6 @@ export class CashcutsService{
         @InjectModel('Cashcut') private readonly cashcutModel: Model<ICashcut>
     ) {}
     async getAll(): Promise<Array<ICashcut>> {
-        return this.cashcutModel.find();
+        return this.cashcutModel.find().lean();
     }
 }
