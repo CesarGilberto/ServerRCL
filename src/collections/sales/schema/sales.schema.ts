@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export const SaleSchema = new mongoose.Schema({
+export const SalesSchema = new mongoose.Schema({
     corte_caja_id:String,
     fecha:String,
     productos:[{

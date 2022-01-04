@@ -14,7 +14,7 @@ export class ServicesController {
     ) { }
 
     @UseGuards(JwtAuthGuard)
-    @Roles(ERole.ADMINISTRADOR)
+    @Roles(ERole.ADMINISTRADOR,ERole.CLIENTE)
     @Get('/')
     async getServices(@Res() res: Response) {
         try {
@@ -25,7 +25,7 @@ export class ServicesController {
         }
     }
     @UseGuards(JwtAuthGuard)
-    @Roles(ERole.ADMINISTRADOR)
+    @Roles(ERole.ADMINISTRADOR, ERole.CLIENTE)
     @Get('/:serviceid')
     async getDetail(@Res() res: Response, @Param("serviceid") serviceid: string) {
         try {
