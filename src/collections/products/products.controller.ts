@@ -14,7 +14,7 @@ export class ProductsController {
     ) { }
 
     @UseGuards(JwtAuthGuard)
-    @Roles(ERole.ADMINISTRADOR)
+    @Roles(ERole.ADMINISTRADOR, ERole.CLIENTE)
     @Get('/')
     async getProducts(@Res() res: Response) {
         try {

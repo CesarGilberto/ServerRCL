@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res, InternalServerErrorException, HttpStatus, BadRequestException } from '@nestjs/common';
+import { Body, Controller, Post, Res, InternalServerErrorException, HttpStatus, BadRequestException, Get, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { RolesService } from '../roles/roles.service';
 import { UserDto } from './dto/user.dto';
@@ -7,6 +7,8 @@ import { ModuleRef} from '@nestjs/core'
 import { ERole } from 'src/core/enums/role.enum';
 import { MailjetService } from 'src/core/services/mailjet';
 import { ETemplatesMailjet } from 'src/core/enums/templates-mailjet.enum';
+import { Roles } from 'src/core/decorators/roles.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -19,7 +21,18 @@ export class UsersController {
     async onModuleInit(){
         this.rolService = this.ModuleRef.get(RolesService, {strict:false})
     }
-
+    @UseGuards(JwtAuthGuard)
+    @Roles(ERole.ADMINISTRADOR)
+    @Get('/empleados')
+    async getEmployees(@Res() res: Response) {
+        try {
+            let rol = await this.rolService.getByDescription(ERole.EMPLEADO)
+            let employees = await this.userService.getByRol(rol.rol_id)
+            res.status(HttpStatus.OK).json(employees);
+        } catch (error) {
+            throw new InternalServerErrorException(error.toString())
+        }
+    }
     @Post('/')
     async create(@Res() res: Response, @Body() userDto: UserDto) {
         let usuario = await this.userService.getByEmail(userDto.usuario)
