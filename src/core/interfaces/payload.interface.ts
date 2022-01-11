@@ -1,5 +1,5 @@
 export interface IPayload {
     username: string;
-    sub: string;
+    userId: string;
     role: string;
 }

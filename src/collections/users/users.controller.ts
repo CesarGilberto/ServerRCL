@@ -9,10 +9,13 @@ import { MailjetService } from 'src/core/services/mailjet';
 import { ETemplatesMailjet } from 'src/core/enums/templates-mailjet.enum';
 import { Roles } from 'src/core/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CustomersService } from '../customers/customers.service';
+import { generateUUID } from 'src/core/utils/utils';
 
 @Controller('users')
 export class UsersController {
     private rolService:RolesService
+    private customerService:CustomersService
     constructor(
         private userService: UsersService,
         private ModuleRef:ModuleRef,
@@ -20,6 +23,7 @@ export class UsersController {
     ) {}
     async onModuleInit(){
         this.rolService = this.ModuleRef.get(RolesService, {strict:false})
+        this.customerService = this.ModuleRef.get(CustomersService, {strict:false})
     }
     @UseGuards(JwtAuthGuard)
     @Roles(ERole.ADMINISTRADOR)
@@ -35,15 +39,23 @@ export class UsersController {
     }
     @Post('/')
     async create(@Res() res: Response, @Body() userDto: UserDto) {
-        let usuario = await this.userService.getByEmail(userDto.usuario)
+        let usuario = await this.userService.getByEmail(userDto.correo)
         if (usuario) {
             throw new BadRequestException("Ya existe este usuario")
         }
         try {
             let rol = await this.rolService.getByDescription(ERole.CLIENTE)
+            userDto.usuario_id=generateUUID()
             userDto.rol_id = rol.rol_id
-            await this.userService.create(userDto);
-
+            const user = await this.userService.create(userDto);
+            await this.customerService.create({
+                usuario_id:user.usuario_id,
+                cliente_id:generateUUID(),  
+                nombre:userDto.nombre,
+                telefono1:userDto.telefono,
+                telefono2:"1111111111"
+            })
+            
             res.status(HttpStatus.CREATED).json({ message: 'user created' });
         } catch (error) {
             throw new InternalServerErrorException(error.toString())

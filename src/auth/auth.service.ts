@@ -27,7 +27,7 @@ export class AuthService {
         const role= await this.roleService.getById(user.rol_id)
         const payload: IPayload = {
             username: user.usuario,
-            sub: user.usuario_id,
+            userId: user.usuario_id,
             role: role.descripcion
         };
         console.log(role)
