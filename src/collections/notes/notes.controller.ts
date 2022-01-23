@@ -40,7 +40,7 @@ export class NotesController {
         }
     }
     @UseGuards(JwtAuthGuard)
-    @Roles(ERole.ADMINISTRADOR)
+    @Roles(ERole.ADMINISTRADOR,  ERole.CLIENTE)
     @Get('/:noteid')
     async getDetail(@Res() res: Response, @Param("noteid") noteid: string) {
         try {
