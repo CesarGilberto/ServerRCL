@@ -14,6 +14,7 @@ import { MovementsModule } from './collections/movements/movements.module';
 import { CashcutModule } from './collections/cashcut/cashcut.module';
 import { SalesModule } from './collections/sales/sales.module';
 import { ConfigModule } from '@nestjs/config';
+import { QuotesModule } from './collections/quotes/quotes.module';
 
 require('dotenv').config();
 @Module({
@@ -33,7 +34,8 @@ require('dotenv').config();
     ServicesModule,
     MovementsModule,
     CashcutModule,
-    SalesModule
+    SalesModule,
+    QuotesModule
   ],
   controllers: [AppController],
   providers: [
