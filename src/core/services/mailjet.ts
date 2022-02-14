@@ -13,7 +13,8 @@ export class MailjetService {
     constructor(
         private configService: ConfigService
     ) {
-        this.mailjet = mailjet.connect(this.configService.get('MAILJET_PUBLIC_API_KEY'), this.configService.get('MAILJET_PRIVATE_API_KEY'));
+        this.mailjet = mailjet.connect(this.configService.get('MAILJET_PUBLIC_API_KEY'), 
+        this.configService.get('MAILJET_PRIVATE_API_KEY'));
         // this._sendTest();
     }
 

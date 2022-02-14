@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res, InternalServerErrorException, HttpStatus, BadRequestException, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Res, InternalServerErrorException, HttpStatus, BadRequestException, Get, UseGuards, Req, Put } from '@nestjs/common';
 import { Response } from 'express';
 import { RolesService } from '../roles/roles.service';
 import { UserDto } from './dto/user.dto';
@@ -11,6 +11,7 @@ import { Roles } from 'src/core/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CustomersService } from '../customers/customers.service';
 import { generateUUID } from 'src/core/utils/utils';
+import { IPayload } from 'src/core/interfaces/payload.interface';
 
 @Controller('users')
 export class UsersController {
@@ -61,6 +62,40 @@ export class UsersController {
             throw new InternalServerErrorException(error.toString())
         }
     } 
+    @Get('/micuenta')
+    @UseGuards(JwtAuthGuard)
+    async getUsers(@Res() res: Response, @Req() req) {
+        try {
+            let session:IPayload=req.user;
+            let employees = await this.userService.getById(session.userId)
+            const {
+                contrasena,...rest
+            }=employees
+            res.status(HttpStatus.OK).json(rest);
+        } catch (error) {
+            throw new InternalServerErrorException(error.toString())
+        }
+    }
+    @Put('/cambiardatos')
+    @UseGuards(JwtAuthGuard)
+    async setChanges(@Res() res: Response, @Req() req, @Body() body){
+        try {
+          let session:IPayload=req.user;
+          let data=await this.userService.getById(session.userId)
+            if(data.contrasena== body.contrasena){
+                if(body.nccontrasena){
+                    body.contrasena=body.nccontrasena
+                }
+                this.userService.setChanges(session.userId, body)
+                res.status(HttpStatus.OK).json(data);
+            }else {
+                res.status(HttpStatus.BAD_REQUEST).json({message:"Contraseña inválida"})
+            }
+        } catch (error) {
+                throw new InternalServerErrorException(error.toString())
+        }
+    }
+
     @Post('/recovery-password')
     async recoveryPass(@Res() res: Response, @Body() userDto: UserDto) {
         console.log(userDto.correo)

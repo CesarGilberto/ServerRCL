@@ -25,6 +25,9 @@ export class UsersService {
         return this.userModel.find({rol_id:_id}).select("-contrasena");
     }
     async getById(usuario_id: string): Promise<IUser> {
-        return this.userModel.findOne({ usuario_id });
+        return this.userModel.findOne({ usuario_id }).lean();
     }
-}
+    async setChanges(usuario_id: string, usuario): Promise<IUser> {
+        return this.userModel.findOneAndUpdate({usuario_id},usuario)
+    }
+}   
